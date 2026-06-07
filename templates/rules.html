@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Rule Base{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+  <div class="page-header">
+    <h1>
+      <i class="fa-solid fa-list-check"
+         style="color:var(--pink-500);margin-right:.5rem;"></i>
+      Knowledge Base — Rule IF-THEN
+    </h1>
+    <p>{{ rules|length }} rule diekstrak otomatis dari Decision Tree C4.5</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="card-icon">
+        <i class="fa-solid fa-key"></i>
+      </div>
+      Legenda Kode Gejala (G1–G19)
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;">
+      {% for code, label in gejala_label.items %}
+      <div style="
+          display:flex;
+          align-items:center;
+          gap:.5rem;
+          padding:.45rem .75rem;
+          background:var(--slate-50);
+          border-radius:var(--radius-sm);
+          border:1px solid var(--slate-100);
+      ">
+        <span style="
+            background:var(--pink-100);
+            color:var(--pink-600);
+            padding:.15rem .5rem;
+            border-radius:4px;
+            font-size:.75rem;
+            font-weight:700;
+            min-width:32px;
+            text-align:center;
+        ">
+          {{ code }}
+        </span>
+
+        <span style="font-size:.78rem;color:var(--slate-600);">
+          {{ label }}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Rules Table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <i class="fa-solid fa-code-branch"></i>
+      </div>
+      Daftar Rule
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Kondisi IF</th>
+            <th>THEN</th>
+            <th>Support</th>
+            <th>Representasi Natural</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for rule in rules %}
+          <tr>
+
+            <td>
+              <strong style="color:var(--pink-600);">
+                {{ rule.kode_rule }}
+              </strong>
+            </td>
+
+            <td>
+              <div class="rule-kondisi">
+                {% for c in rule.kondisi_list %}
+                  <span class="tag-kondisi">{{ c }}</span>
+
+                  {% if not forloop.last %}
+                    <span style="
+                        color:var(--slate-400);
+                        font-size:.72rem;
+                        font-weight:600;
+                    ">
+                      AND
+                    </span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </td>
+
+            <td>
+              <span class="badge badge-{{ rule.risiko }}">
+                {{ rule.risiko|upper }}
+              </span>
+            </td>
+
+            <td style="
+                color:var(--slate-500);
+                font-size:.82rem;
+            ">
+              {{ rule.support }}
+            </td>
+
+            <td style="
+                font-size:.8rem;
+                color:var(--slate-600);
+                font-style:italic;
+            ">
+              {% for label in rule.kondisi_natural %}
+                {{ label }}
+                {% if not forloop.last %}, {% endif %}
+              {% endfor %}
+              →
+              <strong>{{ rule.risiko|upper }}</strong>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

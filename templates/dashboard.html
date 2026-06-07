@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+  <div class="page-header">
+    <h1><i class="fa-solid fa-chart-line" style="color:var(--pink-500);margin-right:.5rem;"></i>Dashboard Statistik</h1>
+    <p>Ringkasan semua hasil diagnosis preeklampsia</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-label">Total Diagnosis</div>
+      <div class="stat-value">{{ total }}</div>
+    </div>
+    <div class="stat-card low-card">
+      <div class="stat-icon">🟢</div>
+      <div class="stat-label">Low Risk</div>
+      <div class="stat-value">{{ low_count }}</div>
+    </div>
+    <div class="stat-card mid-card">
+      <div class="stat-icon">🟡</div>
+      <div class="stat-label">Mid Risk</div>
+      <div class="stat-value">{{ mid_count }}</div>
+    </div>
+    <div class="stat-card high-card">
+      <div class="stat-icon">🔴</div>
+      <div class="stat-label">High Risk</div>
+      <div class="stat-value">{{ high_count }}</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        Distribusi Risiko
+      </div>
+      {% if total > 0 %}
+      <canvas id="pieChart" height="220"></canvas>
+      {% else %}
+      <div class="empty-state"><i class="fa-solid fa-chart-pie"></i>Belum ada data diagnosis</div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-chart-bar"></i></div>
+        Jumlah per Kategori Risiko
+      </div>
+      {% if total > 0 %}
+      <canvas id="barChart" height="220"></canvas>
+      {% else %}
+      <div class="empty-state"><i class="fa-solid fa-chart-bar"></i>Belum ada data diagnosis</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Recent Diagnoses -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      Riwayat Diagnosis Terkini
+    </div>
+    {% if recent %}
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Waktu</th>
+            <th>Usia</th>
+            <th>BMI</th>
+            <th>Sistolik</th>
+            <th>Diastolik</th>
+            <th>Gejala Aktif</th>
+            <th>Rule Aktif</th>
+            <th>ML</th>
+            <th>Hasil Akhir</th>
+            <th>Confidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in recent %}
+          <tr>
+            <td style="color:var(--slate-400);font-size:.8rem;">{{ forloop.counter }}</td>
+            <td style="font-size:.8rem;color:var(--slate-500);">{{ d.created_at|date:"d/m/Y H:i" }}</td>
+            <td>{{ d.usia|floatformat:0 }} thn</td>
+            <td>{{ d.bmi|floatformat:1 }}</td>
+            <td>{{ d.sistolik|floatformat:0 }}</td>
+            <td>{{ d.diastolik|floatformat:0 }}</td>
+            <td>
+              <div style="display:flex;flex-wrap:wrap;gap:.2rem;">
+                {% for g in d.gejala_aktif.split %}
+                  {% with g_clean=g|cut:"," %}
+                  <span style="background:var(--pink-100);color:var(--pink-600);padding:.1rem .35rem;border-radius:4px;font-size:.7rem;font-weight:600;">{{ g_clean }}</span>
+                  {% endwith %}
+                {% endfor %}
+              </div>
+            </td>
+            <td>
+              {% if d.rule_aktif %}
+                <span style="font-size:.78rem;color:#6d28d9;font-weight:600;">{{ d.rule_aktif }}</span>
+              {% else %}
+                <span style="color:var(--slate-300);font-size:.78rem;">—</span>
+              {% endif %}
+            </td>
+            <td><span class="badge badge-{{ d.ml_result }}">{{ d.ml_result|upper }}</span></td>
+            <td><span class="badge badge-{{ d.final_result }}">{{ d.final_result|upper }}</span></td>
+            <td><strong style="color:var(--pink-600);">{{ d.confidence|floatformat:1 }}%</strong></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-inbox"></i>
+      <p>Belum ada diagnosis. <a href="{% url 'diagnosis' %}" style="color:var(--pink-500);">Mulai diagnosis pertama</a></p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<script>
+{% if total > 0 %}
+const pink500 = '#e83e8c';
+const green   = '#22c55e';
+const amber   = '#f59e0b';
+const red     = '#ef4444';
+
+// Pie
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['LOW RISK', 'MID RISK', 'HIGH RISK'],
+    datasets: [{
+      data: [{{ low_count }}, {{ mid_count }}, {{ high_count }}],
+      backgroundColor: [green, amber, red],
+      borderWidth: 3,
+      borderColor: '#fff',
+      hoverOffset: 8,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'Poppins', size: 12 }, padding: 16 }},
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw} pasien` }}
+    },
+    cutout: '65%',
+  }
+});
+
+// Bar
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: ['LOW RISK', 'MID RISK', 'HIGH RISK'],
+    datasets: [{
+      label: 'Jumlah Diagnosis',
+      data: [{{ low_count }}, {{ mid_count }}, {{ high_count }}],
+      backgroundColor: [
+        'rgba(34,197,94,.80)',
+        'rgba(245,158,11,.80)',
+        'rgba(239,68,68,.80)',
+      ],
+      borderRadius: 8,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' }},
+      x: { grid: { display: false }}
+    }
+  }
+});
+{% endif %}
+</script>
+{% endblock %}

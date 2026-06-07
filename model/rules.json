@@ -1,0 +1,260 @@
+[
+  {
+    "kode_rule": "R1",
+    "kondisi": "G1&G4&G8&G12&G19",
+    "risiko": "low",
+    "support": 1
+  },
+  {
+    "kode_rule": "R2",
+    "kondisi": "G1&G6&G8&G13&G19",
+    "risiko": "low",
+    "support": 1
+  },
+  {
+    "kode_rule": "R3",
+    "kondisi": "G2&G5&G8&G14&G18",
+    "risiko": "low",
+    "support": 1
+  },
+  {
+    "kode_rule": "R4",
+    "kondisi": "G2&G6&G8&G13&G19",
+    "risiko": "low",
+    "support": 1
+  },
+  {
+    "kode_rule": "R5",
+    "kondisi": "G2&G7&G9&G13&G19",
+    "risiko": "low",
+    "support": 1
+  },
+  {
+    "kode_rule": "R6",
+    "kondisi": "G2&G5&G9&G12&G18",
+    "risiko": "low",
+    "support": 2
+  },
+  {
+    "kode_rule": "R7",
+    "kondisi": "G1&G6&G8&G12&G19",
+    "risiko": "low",
+    "support": 3
+  },
+  {
+    "kode_rule": "R8",
+    "kondisi": "G2&G6&G8&G12&G18",
+    "risiko": "low",
+    "support": 3
+  },
+  {
+    "kode_rule": "R9",
+    "kondisi": "G2&G6&G8&G12&G19",
+    "risiko": "low",
+    "support": 11
+  },
+  {
+    "kode_rule": "R10",
+    "kondisi": "G2&G7&G8&G12&G19",
+    "risiko": "low",
+    "support": 11
+  },
+  {
+    "kode_rule": "R11",
+    "kondisi": "G2&G5&G8&G12&G19",
+    "risiko": "low",
+    "support": 45
+  },
+  {
+    "kode_rule": "R12",
+    "kondisi": "G1&G6&G9&G12&G15&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R13",
+    "kondisi": "G2&G5&G8&G12&G15&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R14",
+    "kondisi": "G2&G5&G8&G12&G16&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R15",
+    "kondisi": "G2&G6&G8&G12&G16&G18",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R16",
+    "kondisi": "G2&G6&G8&G12&G17&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R17",
+    "kondisi": "G2&G6&G8&G13&G15&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R18",
+    "kondisi": "G2&G6&G9&G13&G17&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R19",
+    "kondisi": "G2&G7&G8&G12&G17&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R20",
+    "kondisi": "G2&G7&G9&G14&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R21",
+    "kondisi": "G3&G5&G8&G12&G17&G19",
+    "risiko": "mid",
+    "support": 1
+  },
+  {
+    "kode_rule": "R22",
+    "kondisi": "G2&G6&G8&G12&G17&G18",
+    "risiko": "mid",
+    "support": 2
+  },
+  {
+    "kode_rule": "R23",
+    "kondisi": "G2&G6&G9&G12&G19",
+    "risiko": "mid",
+    "support": 2
+  },
+  {
+    "kode_rule": "R24",
+    "kondisi": "G2&G7&G8&G12&G16&G19",
+    "risiko": "mid",
+    "support": 2
+  },
+  {
+    "kode_rule": "R25",
+    "kondisi": "G2&G7&G9&G12&G17&G19",
+    "risiko": "mid",
+    "support": 2
+  },
+  {
+    "kode_rule": "R26",
+    "kondisi": "G2&G7&G9&G14&G17&G19",
+    "risiko": "mid",
+    "support": 2
+  },
+  {
+    "kode_rule": "R27",
+    "kondisi": "G2&G5&G9&G12&G17&G18",
+    "risiko": "mid",
+    "support": 3
+  },
+  {
+    "kode_rule": "R28",
+    "kondisi": "G2&G6&G9&G13&G15&G16&G19",
+    "risiko": "mid",
+    "support": 3
+  },
+  {
+    "kode_rule": "R29",
+    "kondisi": "G2&G4&G10&G13&G16&G19",
+    "risiko": "mid",
+    "support": 27
+  },
+  {
+    "kode_rule": "R30",
+    "kondisi": "G1&G6&G10&G13&G15&G16&G17&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R31",
+    "kondisi": "G1&G7&G9&G12&G15&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R32",
+    "kondisi": "G2&G5&G8&G12&G15&G17&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R33",
+    "kondisi": "G2&G5&G9&G13&G15&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R34",
+    "kondisi": "G2&G6&G10&G13&G15&G16&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R35",
+    "kondisi": "G2&G6&G8&G13&G17&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R36",
+    "kondisi": "G2&G7&G9&G12&G16&G17&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R37",
+    "kondisi": "G2&G7&G9&G13&G17&G19",
+    "risiko": "high",
+    "support": 1
+  },
+  {
+    "kode_rule": "R38",
+    "kondisi": "G1&G7&G10&G12&G15&G16&G17&G19",
+    "risiko": "high",
+    "support": 2
+  },
+  {
+    "kode_rule": "R39",
+    "kondisi": "G2&G6&G10&G13&G15&G17&G19",
+    "risiko": "high",
+    "support": 2
+  },
+  {
+    "kode_rule": "R40",
+    "kondisi": "G2&G6&G10&G13&G16&G17&G19",
+    "risiko": "high",
+    "support": 2
+  },
+  {
+    "kode_rule": "R41",
+    "kondisi": "G2&G7&G10&G13&G15&G16&G19",
+    "risiko": "high",
+    "support": 2
+  },
+  {
+    "kode_rule": "R42",
+    "kondisi": "G2&G7&G8&G12&G15&G17&G19",
+    "risiko": "high",
+    "support": 2
+  },
+  {
+    "kode_rule": "R43",
+    "kondisi": "G2&G7&G9&G12&G15&G16&G17&G19",
+    "risiko": "high",
+    "support": 2
+  }
+]

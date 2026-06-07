@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block title %}Evaluasi Model{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+  <div class="page-header">
+    <h1><i class="fa-solid fa-chart-bar" style="color:var(--pink-500);margin-right:.5rem;"></i>Evaluasi Model C4.5</h1>
+    <p>Performa Decision Tree pada {{ total_test }} data uji (test dataset)</p>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metric-grid mb-3">
+    <div class="metric-card">
+      <div class="metric-value">{{ accuracy }}%</div>
+      <div class="metric-label">Accuracy</div>
+      <div style="margin-top:.5rem;">
+        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
+          <div style="height:100%;width:{{ accuracy }}%;background:linear-gradient(90deg,var(--pink-400),var(--pink-600));border-radius:99px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ precision }}%</div>
+      <div class="metric-label">Precision</div>
+      <div style="margin-top:.5rem;">
+        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
+          <div style="height:100%;width:{{ precision }}%;background:linear-gradient(90deg,#818cf8,#6d28d9);border-radius:99px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ recall }}%</div>
+      <div class="metric-label">Recall</div>
+      <div style="margin-top:.5rem;">
+        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
+          <div style="height:100%;width:{{ recall }}%;background:linear-gradient(90deg,#34d399,#059669);border-radius:99px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ f1 }}%</div>
+      <div class="metric-label">F1 Score</div>
+      <div style="margin-top:.5rem;">
+        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
+          <div style="height:100%;width:{{ f1 }}%;background:linear-gradient(90deg,#fb923c,#ea580c);border-radius:99px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+
+    <!-- Bar Chart Metrics -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-chart-column"></i></div>
+        Visualisasi Metrik Evaluasi
+      </div>
+      <canvas id="metricBar" height="200"></canvas>
+    </div>
+
+    <!-- Confusion Matrix Heatmap -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-table-cells"></i></div>
+        Confusion Matrix (Heatmap)
+      </div>
+      <canvas id="cmChart" height="200"></canvas>
+    </div>
+
+  </div>
+
+  <!-- CM Table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon"><i class="fa-solid fa-table"></i></div>
+      Tabel Confusion Matrix
+    </div>
+    <div class="cm-wrapper">
+      <table class="cm-table">
+        <thead>
+          <tr>
+            <th style="background:#fff;border-color:transparent;"></th>
+            <th colspan="{{ classes_list|length }}" style="background:var(--pink-100);color:var(--pink-600);">
+              Prediksi
+            </th>
+          </tr>
+          <tr>
+            <th style="background:#fff;border-color:transparent;">Aktual</th>
+            {% for c in classes_list %}
+            <th>{{ c }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in cm_list %}
+          <tr>
+            <th>{{ classes_list|slice:forloop.counter0|last }}</th>
+            {% for val in row %}
+            <td {% if forloop.counter0 == forloop.parentloop.counter0 %}class="cm-diag"{% endif %}>
+              {{ val }}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400);text-align:center;">
+      <em>Baris = label aktual, Kolom = prediksi model. Diagonal = prediksi benar.</em>
+    </p>
+  </div>
+
+</div>
+
+<script>
+const classes = {{ classes }};
+const cm = {{ cm }};
+const metrics = [{{ accuracy }}, {{ precision }}, {{ recall }}, {{ f1 }}];
+const metricLabels = ['Accuracy', 'Precision', 'Recall', 'F1 Score'];
+const metricColors = ['rgba(232,62,140,.8)','rgba(109,40,217,.8)','rgba(5,150,105,.8)','rgba(234,88,12,.8)'];
+
+// Metric Bar
+new Chart(document.getElementById('metricBar'), {
+  type: 'bar',
+  data: {
+    labels: metricLabels,
+    datasets: [{
+      label: 'Score (%)',
+      data: metrics,
+      backgroundColor: metricColors,
+      borderRadius: 8,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false }},
+    scales: {
+      x: { min: 0, max: 100, ticks: { callback: v => v+'%' }, grid: { color: '#f1f5f9' }},
+      y: { grid: { display: false }}
+    }
+  }
+});
+
+// CM Heatmap (bubble-style)
+const cmData = [];
+let maxVal = 0;
+cm.forEach((row, r) => row.forEach((val, c) => { if(val > maxVal) maxVal = val; }));
+
+cm.forEach((row, r) => {
+  row.forEach((val, c) => {
+    cmData.push({ x: c, y: r, v: val });
+  });
+});
+
+// Custom heatmap via scatter
+new Chart(document.getElementById('cmChart'), {
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'CM',
+      data: cmData.map(d => ({ x: d.x, y: d.y })),
+      backgroundColor: cmData.map(d => {
+        const alpha = maxVal > 0 ? 0.15 + (d.v / maxVal) * 0.75 : 0.15;
+        return d.x === d.y
+          ? `rgba(232,62,140,${alpha})`
+          : `rgba(148,163,184,${alpha})`;
+      }),
+      pointRadius: 38,
+      pointHoverRadius: 40,
+    }]
+  },
+  plugins: [{
+    id: 'cmLabels',
+    afterDraw(chart) {
+      const ctx = chart.ctx;
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      cmData.forEach((d, i) => {
+        const pt = chart.getDatasetMeta(0).data[i];
+        ctx.font = 'bold 18px Poppins';
+        ctx.fillStyle = d.x === d.y ? '#9d174d' : '#475569';
+        ctx.fillText(d.v, pt.x, pt.y);
+      });
+      ctx.restore();
+    }
+  }],
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { enabled: false }},
+    scales: {
+      x: {
+        min: -0.5, max: classes.length - 0.5, stepSize: 1,
+        ticks: { callback: v => classes[v] || '', font: { size: 11 }},
+        title: { display: true, text: 'Prediksi', color: '#e83e8c' },
+        grid: { display: false },
+      },
+      y: {
+        min: -0.5, max: classes.length - 0.5, stepSize: 1, reverse: false,
+        ticks: { callback: v => classes[v] || '', font: { size: 11 }},
+        title: { display: true, text: 'Aktual', color: '#e83e8c' },
+        grid: { display: false },
+      }
+    }
+  }
+});
+</script>
+{% endblock %}
