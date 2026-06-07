@@ -21,6 +21,3 @@ SPDP (Sistem Pendukung Diagnosis Penyakit) adalah aplikasi berbasis web yang dir
 - SQLite
 - Machine Learning (C4.5 Algorithm)
 
----
-
-## 📂 Struktur Project
