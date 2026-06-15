@@ -39,12 +39,14 @@
         <span class="nav-text">Rule Base</span>
       </a>
     </li>
-    <li>
-      <a href="{% url 'evaluation' %}" {% if request.resolver_match.url_name == 'evaluation' %}class="active"{% endif %}>
-        <i class="fa-solid fa-chart-bar"></i>
-        <span class="nav-text">Evaluasi</span>
-      </a>
-    </li>
+      {% comment %}
+      <li>
+        <a href="{% url 'evaluation' %}" {% if request.resolver_match.url_name == 'evaluation' %}class="active"{% endif %}>
+          <i class="fa-solid fa-chart-bar"></i>
+          <span class="nav-text">Evaluasi</span>
+        </a>
+      </li>
+      {% endcomment %}
   </ul>
 </nav>
 

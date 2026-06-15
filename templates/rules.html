@@ -10,7 +10,7 @@
          style="color:var(--pink-500);margin-right:.5rem;"></i>
       Knowledge Base — Rule IF-THEN
     </h1>
-    <p>{{ rules|length }} rule diekstrak otomatis dari Decision Tree C4.5</p>
+    <p>{{ rules|length }} rules deteksi preeklampsia</p>
   </div>
 
   <!-- Legend -->
@@ -86,15 +86,16 @@
             </td>
 
             <td>
-              <div class="rule-kondisi">
+              <div class="rule-kondisi" style="display:flex;flex-wrap:wrap;align-items:center;gap:.25rem;">
                 {% for c in rule.kondisi_list %}
                   <span class="tag-kondisi">{{ c }}</span>
 
                   {% if not forloop.last %}
                     <span style="
-                        color:var(--slate-400);
-                        font-size:.72rem;
-                        font-weight:600;
+                      color:var(--slate-400);
+                      font-size:.72rem;
+                      font-weight:600;
+                      margin:0 .1rem;
                     ">
                       AND
                     </span>
@@ -121,12 +122,8 @@
                 color:var(--slate-600);
                 font-style:italic;
             ">
-              {% for label in rule.kondisi_natural %}
-                {{ label }}
-                {% if not forloop.last %}, {% endif %}
-              {% endfor %}
-              →
-              <strong>{{ rule.risiko|upper }}</strong>
+              {% for label in rule.kondisi_natural %}{{ label }}{% if not forloop.last %}, {% endif %}{% endfor %}
+              → <strong>{{ rule.risiko|upper }}</strong>
             </td>
 
           </tr>

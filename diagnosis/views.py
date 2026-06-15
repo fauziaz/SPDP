@@ -64,6 +64,9 @@ def dashboard_view(request):
     dist_dict = {d['final_result']: d['count'] for d in dist}
     recent = DiagnosisResult.objects.order_by('-created_at')[:10]
 
+    for d in recent:
+        d.gejala_list = d.gejala_aktif.split(',')
+
     context = {
         'total': total,
         'low_count': dist_dict.get('low', 0),

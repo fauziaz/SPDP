@@ -34,7 +34,7 @@
   </div>
 
   <!-- Charts -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
     <div class="card">
       <div class="card-header">
         <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
@@ -95,10 +95,17 @@
             <td>{{ d.diastolik|floatformat:0 }}</td>
             <td>
               <div style="display:flex;flex-wrap:wrap;gap:.2rem;">
-                {% for g in d.gejala_aktif.split %}
-                  {% with g_clean=g|cut:"," %}
-                  <span style="background:var(--pink-100);color:var(--pink-600);padding:.1rem .35rem;border-radius:4px;font-size:.7rem;font-weight:600;">{{ g_clean }}</span>
-                  {% endwith %}
+                {% for g in d.gejala_list %}
+                  <span style="
+                    background:var(--pink-100);
+                    color:var(--pink-600);
+                    padding:.1rem .35rem;
+                    border-radius:4px;
+                    font-size:.7rem;
+                    font-weight:600;
+                  ">
+                    {{ g }}
+                  </span>
                 {% endfor %}
               </div>
             </td>
