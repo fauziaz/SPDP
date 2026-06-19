@@ -38,28 +38,44 @@ def convert_to_gejala(age, bmi, systolic, diastolic, gest_age,
     if age < 20:     gejala.add('G1')
     elif age <= 35:  gejala.add('G2')
     else:            gejala.add('G3')
+    
     # BMI
     if bmi < 18.5:        gejala.add('G4')
     elif bmi <= 24.9:     gejala.add('G5')
     elif bmi <= 29.9:     gejala.add('G6')
     else:                 gejala.add('G7')
+    
     # Sistolik
     if systolic < 120:    gejala.add('G8')
     elif systolic <= 129: gejala.add('G9')
     elif systolic <= 139: gejala.add('G10')
     else:                 gejala.add('G11')
+    
     # Diastolik
     if diastolic < 80:    gejala.add('G12')
     elif diastolic <= 89: gejala.add('G13')
     else:                 gejala.add('G14')
-    # Faktor risiko
+    
+    # Faktor risiko (MODIFIKASI NEGASI EKSPLISIT)
     if proteinuria: gejala.add('G15')
+    else:           gejala.add('G20')
+
     if diabetes:    gejala.add('G16')
+    else:           gejala.add('G21')
+
     if hipertensi:  gejala.add('G17')
+    else:           gejala.add('G22')
+    
     # Usia kehamilan
     if gest_age < 20:  gejala.add('G18')
     else:              gejala.add('G19')
+    
     return gejala
+
+# ─────────────────────────────────────────────
+# 3. FEATURE ENGINEERING → GEJALA BINARY
+# ─────────────────────────────────────────────
+ALL_GEJALA = [f'G{i}' for i in range(1, 23)] # DIUBAH DARI 20 MENJADI 23
 
 # ─────────────────────────────────────────────
 # 3. FEATURE ENGINEERING → GEJALA BINARY

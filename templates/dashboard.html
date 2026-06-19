@@ -75,6 +75,7 @@
             <th>Waktu</th>
             <th>Usia</th>
             <th>BMI</th>
+            <th>Usia Kehamilan</th>
             <th>Sistolik</th>
             <th>Diastolik</th>
             <th>Gejala Aktif</th>
@@ -91,6 +92,7 @@
             <td style="font-size:.8rem;color:var(--slate-500);">{{ d.created_at|date:"d/m/Y H:i" }}</td>
             <td>{{ d.usia|floatformat:0 }} thn</td>
             <td>{{ d.bmi|floatformat:1 }}</td>
+            <td>{{ d.usia_kehamilan|floatformat:1 }} minggu</td>
             <td>{{ d.sistolik|floatformat:0 }}</td>
             <td>{{ d.diastolik|floatformat:0 }}</td>
             <td>

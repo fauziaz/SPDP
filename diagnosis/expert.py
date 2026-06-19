@@ -7,7 +7,7 @@ import pandas as pd
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, 'model', 'c45_model.pkl')
 
-ALL_GEJALA = [f'G{i}' for i in range(1, 20)]
+ALL_GEJALA = [f'G{i}' for i in range(1, 23)]  # Ubah range menjadi 23
 
 GEJALA_LABEL = {
     'G1':  'Usia < 20 tahun',
@@ -29,8 +29,11 @@ GEJALA_LABEL = {
     'G17': 'Riwayat Hipertensi',
     'G18': 'Usia Kehamilan < 20 minggu',
     'G19': 'Usia Kehamilan ≥ 20 minggu',
+    # TAMBAHKAN 3 BARIS INI:
+    'G20': 'Proteinuria (-)',
+    'G21': 'Tidak ada Riwayat Diabetes',
+    'G22': 'Tidak ada Riwayat Hipertensi',
 }
-
 _model_cache = None
 
 def _load_model():
@@ -41,25 +44,36 @@ def _load_model():
 
 
 def convert_to_gejala(age, bmi, systolic, diastolic, gest_age,
-                       proteinuria=False, diabetes=False, hipertensi=False):
+                      proteinuria=False, diabetes=False, hipertensi=False):
     gejala = set()
     if age < 20:      gejala.add('G1')
     elif age <= 35:   gejala.add('G2')
     else:             gejala.add('G3')
+    
     if bmi < 18.5:        gejala.add('G4')
     elif bmi <= 24.9:     gejala.add('G5')
     elif bmi <= 29.9:     gejala.add('G6')
     else:                 gejala.add('G7')
+    
     if systolic < 120:    gejala.add('G8')
     elif systolic <= 129: gejala.add('G9')
     elif systolic <= 139: gejala.add('G10')
     else:                 gejala.add('G11')
+    
     if diastolic < 80:    gejala.add('G12')
     elif diastolic <= 89: gejala.add('G13')
     else:                 gejala.add('G14')
+    
+    # BAGIAN YANG HARUS DIUBAH (NEGASI EKSPLISIT):
     if proteinuria: gejala.add('G15')
+    else:           gejala.add('G20')
+    
     if diabetes:    gejala.add('G16')
+    else:           gejala.add('G21')
+    
     if hipertensi:  gejala.add('G17')
+    else:           gejala.add('G22')
+    
     if gest_age < 20:  gejala.add('G18')
     else:              gejala.add('G19')
     return gejala
