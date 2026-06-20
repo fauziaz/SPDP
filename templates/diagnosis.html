@@ -21,52 +21,63 @@
 
       <form method="post" id="diagnosisForm">
         {% csrf_token %}
-
         <div class="form-grid">
-          <div class="form-group">
-            <label for="{{ form.usia.id_for_label }}">
-              <i class="fa-solid fa-user" style="color:var(--pink-400);"></i>
-              {{ form.usia.label }}
-            </label>
-            {{ form.usia }}
-            {% if form.usia.errors %}
-              <small style="color:var(--red);">{{ form.usia.errors.0 }}</small>
-            {% endif %}
-          </div>
+          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="form-group">
+              <label for="{{ form.usia.id_for_label }}">
+                <i class="fa-solid fa-user" style="color:var(--pink-400);"></i>
+                {{ form.usia.label }}
+              </label>
+              {{ form.usia }}
+              {% if form.usia.errors %}
+                <small style="color:var(--red);">{{ form.usia.errors.0 }}</small>
+              {% endif %}
+            </div>
 
-          <div class="form-group">
-            <label for="{{ form.bmi.id_for_label }}">
-              <i class="fa-solid fa-weight-scale" style="color:var(--pink-400);"></i>
-              {{ form.bmi.label }}
-            </label>
-            {{ form.bmi }}
-            {% if form.bmi.errors %}
-              <small style="color:var(--red);">{{ form.bmi.errors.0 }}</small>
-            {% endif %}
-          </div>
+            <div class="form-group">
+              <label for="{{ form.bmi.id_for_label }}">
+                <i class="fa-solid fa-weight-scale" style="color:var(--pink-400);"></i>
+                {{ form.bmi.label }}
+              </label>
+              {{ form.bmi }}
+              {% if form.bmi.errors %}
+                <small style="color:var(--red);">{{ form.bmi.errors.0 }}</small>
+              {% endif %}
+            </div>
 
-          <div class="form-group">
-            <label for="{{ form.usia_kehamilan.id_for_label }}">
-              <i class="fa-solid fa-baby" style="color:var(--pink-400);"></i>
-              {{ form.usia_kehamilan.label }}
-            </label>
-            {{ form.usia_kehamilan }}
+            <div class="form-group">
+              <label for="{{ form.usia_kehamilan.id_for_label }}">
+                <i class="fa-solid fa-baby" style="color:var(--pink-400);"></i>
+                {{ form.usia_kehamilan.label }}
+              </label>
+              {{ form.usia_kehamilan }}
+              {% if form.usia_kehamilan.errors %}
+                <small style="color:var(--red);">{{ form.usia_kehamilan.errors.0 }}</small>
+              {% endif %}
+            </div>
           </div>
+          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+              <label for="{{ form.sistolik.id_for_label }}">
+                <i class="fa-solid fa-heart-pulse" style="color:var(--pink-400);"></i>
+                {{ form.sistolik.label }}
+              </label>
+              {{ form.sistolik }}
+              {% if form.sistolik.errors %}
+                <small style="color:var(--red);">{{ form.sistolik.errors.0 }}</small>
+              {% endif %}
+            </div>
 
-          <div class="form-group">
-            <label for="{{ form.sistolik.id_for_label }}">
-              <i class="fa-solid fa-heart-pulse" style="color:var(--pink-400);"></i>
-              {{ form.sistolik.label }}
-            </label>
-            {{ form.sistolik }}
-          </div>
-
-          <div class="form-group" style="grid-column:1/-1;">
-            <label for="{{ form.diastolik.id_for_label }}">
-              <i class="fa-solid fa-droplet" style="color:var(--pink-400);"></i>
-              {{ form.diastolik.label }}
-            </label>
-            {{ form.diastolik }}
+            <div class="form-group">
+              <label for="{{ form.diastolik.id_for_label }}">
+                <i class="fa-solid fa-droplet" style="color:var(--pink-400);"></i>
+                {{ form.diastolik.label }}
+              </label>
+              {{ form.diastolik }}
+              {% if form.diastolik.errors %}
+                <small style="color:var(--red);">{{ form.diastolik.errors.0 }}</small>
+              {% endif %}
+            </div>
           </div>
         </div>
 
