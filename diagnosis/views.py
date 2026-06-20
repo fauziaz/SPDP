@@ -5,6 +5,7 @@ import numpy as np
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,
                               f1_score, confusion_matrix)
 from .forms import DiagnosisForm
@@ -66,6 +67,13 @@ def dashboard_view(request):
 
     for d in recent:
         d.gejala_list = d.gejala_aktif.split(',')
+
+    semua_diagnosis = DiagnosisResult.objects.all().order_by('-created_at')
+
+    paginator = Paginator(semua_diagnosis, 10)
+
+    page_number = request.GET.get('page')
+    recent = paginator.get_page(page_number)
 
     context = {
         'total': total,

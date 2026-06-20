@@ -93,7 +93,7 @@
             <td style="font-size:.8rem;color:var(--slate-500);">{{ d.created_at|date:"d/m/Y H:i" }}</td>
             <td>{{ d.usia|floatformat:0 }} thn</td>
             <td>{{ d.bmi|floatformat:1 }}</td>
-            <td>{{ d.usia_kehamilan|floatformat:1 }} minggu</td>
+            <td>{{ d.usia_kehamilan|floatformat:0 }} minggu</td>
             <td>{{ d.sistolik|floatformat:0 }}</td>
             <td>{{ d.diastolik|floatformat:0 }}</td>
             <td>
@@ -134,14 +134,41 @@
         </tbody>
       </table>
     </div>
+    {% if recent.has_other_pages %}
+    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">
+      
+      {% if recent.has_previous %}
+        <a href="?page={{ recent.previous_page_number }}" style="padding: 0.4rem 0.8rem; background: white; border: 1px solid var(--slate-200); border-radius: 6px; color: var(--slate-600); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">
+          <i class="fa-solid fa-chevron-left"></i> Prev
+        </a>
+      {% endif %}
+
+      {% for num in recent.paginator.page_range %}
+        {% if recent.number == num %}
+          <span style="padding: 0.4rem 0.85rem; background: var(--pink-500); border: 1px solid var(--pink-500); border-radius: 6px; color: white; font-size: 0.85rem; font-weight: 600;">
+            {{ num }}
+          </span>
+        {% elif num > recent.number|add:'-3' and num < recent.number|add:'3' %}
+          <a href="?page={{ num }}" style="padding: 0.4rem 0.85rem; background: white; border: 1px solid var(--slate-200); border-radius: 6px; color: var(--slate-600); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">
+            {{ num }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if recent.has_next %}
+        <a href="?page={{ recent.next_page_number }}" style="padding: 0.4rem 0.8rem; background: white; border: 1px solid var(--slate-200); border-radius: 6px; color: var(--slate-600); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s;">
+          Next <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      {% endif %}
+
+    </div>
+    {% endif %}
     {% else %}
     <div class="empty-state">
       <i class="fa-solid fa-inbox"></i>
       <p>Belum ada diagnosis. <a href="{% url 'diagnosis' %}" style="color:var(--pink-500);">Mulai diagnosis pertama</a></p>
     </div>
     {% endif %}
-  </div>
-
 </div>
 
 <script>
