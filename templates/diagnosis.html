@@ -9,112 +9,83 @@
     <h1><i class="fa-solid fa-stethoscope" style="color:var(--pink-500);margin-right:.5rem;"></i>Diagnosis Risiko Preeklampsia</h1>
     <p>Masukkan data klinis ibu hamil untuk mendeteksi risiko preeklampsia</p>
   </div>
-
-  <div style="display:grid;grid-template-columns:1fr{% if result %} 1fr{% endif %};gap:1.5rem;align-items:start;">
-
-    <!-- ── INPUT FORM ── -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-        Data Klinis Pasien
-      </div>
-
-      <form method="post" id="diagnosisForm">
-        {% csrf_token %}
-        <div class="form-grid">
-          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+  
+  <div style="display:grid;grid-template-columns:1fr{% if result %} 1.8fr{% endif %};gap:1.5rem;align-items:start;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+          Data Klinis Pasien
+        </div>
+        <form method="post" id="diagnosisForm">
+          {% csrf_token %}
+          <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
               <label for="{{ form.usia.id_for_label }}">
                 <i class="fa-solid fa-user" style="color:var(--pink-400);"></i>
                 {{ form.usia.label }}
               </label>
               {{ form.usia }}
-              {% if form.usia.errors %}
-                <small style="color:var(--red);">{{ form.usia.errors.0 }}</small>
-              {% endif %}
+              {% if form.usia.errors %}<small style="color:var(--red);">{{ form.usia.errors.0 }}</small>{% endif %}
             </div>
-
             <div class="form-group">
               <label for="{{ form.bmi.id_for_label }}">
                 <i class="fa-solid fa-weight-scale" style="color:var(--pink-400);"></i>
                 {{ form.bmi.label }}
               </label>
               {{ form.bmi }}
-              {% if form.bmi.errors %}
-                <small style="color:var(--red);">{{ form.bmi.errors.0 }}</small>
-              {% endif %}
+              {% if form.bmi.errors %}<small style="color:var(--red);">{{ form.bmi.errors.0 }}</small>{% endif %}
             </div>
-
-            <div class="form-group">
+            <div class="form-group" style="grid-column: 1 / -1;">
               <label for="{{ form.usia_kehamilan.id_for_label }}">
                 <i class="fa-solid fa-baby" style="color:var(--pink-400);"></i>
                 {{ form.usia_kehamilan.label }}
               </label>
+              <style>
+                #{{ form.usia_kehamilan.id_for_label }} {
+                  width: 100%;
+                  box-sizing: border-box;
+                }
+              </style>
               {{ form.usia_kehamilan }}
-              {% if form.usia_kehamilan.errors %}
-                <small style="color:var(--red);">{{ form.usia_kehamilan.errors.0 }}</small>
-              {% endif %}
+              {% if form.usia_kehamilan.errors %}<small style="color:var(--red);">{{ form.usia_kehamilan.errors.0 }}</small>{% endif %}
             </div>
-          </div>
-          <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
             <div class="form-group">
               <label for="{{ form.sistolik.id_for_label }}">
                 <i class="fa-solid fa-heart-pulse" style="color:var(--pink-400);"></i>
                 {{ form.sistolik.label }}
               </label>
               {{ form.sistolik }}
-              {% if form.sistolik.errors %}
-                <small style="color:var(--red);">{{ form.sistolik.errors.0 }}</small>
-              {% endif %}
+              {% if form.sistolik.errors %}<small style="color:var(--red);">{{ form.sistolik.errors.0 }}</small>{% endif %}
             </div>
-
             <div class="form-group">
               <label for="{{ form.diastolik.id_for_label }}">
                 <i class="fa-solid fa-droplet" style="color:var(--pink-400);"></i>
                 {{ form.diastolik.label }}
               </label>
               {{ form.diastolik }}
-              {% if form.diastolik.errors %}
-                <small style="color:var(--red);">{{ form.diastolik.errors.0 }}</small>
-              {% endif %}
+              {% if form.diastolik.errors %}<small style="color:var(--red);">{{ form.diastolik.errors.0 }}</small>{% endif %}
             </div>
           </div>
-        </div>
-
-        <!-- Checkboxes -->
-        <div style="margin-top:1.25rem;">
-          <label style="font-size:.82rem;font-weight:600;color:var(--slate-600);display:block;margin-bottom:.6rem;">
-            <i class="fa-solid fa-triangle-exclamation" style="color:var(--pink-400);"></i>
-            Faktor Risiko
-          </label>
-          <div class="checkbox-group">
-            <label class="check-item">
-              {{ form.proteinuria }}
-              <span class="check-label">🧪 {{ form.proteinuria.label }}</span>
+          <div style="margin-top:1.25rem;">
+            <label style="font-size:.82rem;font-weight:600;color:var(--slate-600);display:block;margin-bottom:.6rem;">
+              <i class="fa-solid fa-triangle-exclamation" style="color:var(--pink-400);"></i>
+              Faktor Risiko
             </label>
-            <label class="check-item">
-              {{ form.diabetes }}
-              <span class="check-label">🩸 {{ form.diabetes.label }}</span>
-            </label>
-            <label class="check-item">
-              {{ form.hipertensi }}
-              <span class="check-label">💉 {{ form.hipertensi.label }}</span>
-            </label>
+            <div class="checkbox-group">
+              <label class="check-item">{{ form.proteinuria }} <span class="check-label">🧪 {{ form.proteinuria.label }}</span></label>
+              <label class="check-item">{{ form.diabetes }} <span class="check-label">🩸 {{ form.diabetes.label }}</span></label>
+              <label class="check-item">{{ form.hipertensi }} <span class="check-label">💉 {{ form.hipertensi.label }}</span></label>
+            </div>
           </div>
-        </div>
-
-        <button type="submit" class="btn-detect" id="detectBtn">
-          <i class="fa-solid fa-magnifying-glass-chart"></i>
-          DETEKSI RISIKO
-        </button>
-      </form>
-    </div>
-
+          <button type="submit" class="btn-detect" id="detectBtn">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> DETEKSI RISIKO
+          </button>
+        </form>
+      </div>
+    </div> 
     {% if result %}
-    <!-- ── RESULT ── -->
     <div class="result-section">
-
-      <!-- Risk Banner -->
       <div class="risk-banner {{ result.final_result }}">
         <div class="risk-icon">
           {% if result.final_result == 'low' %}🟢
@@ -133,108 +104,96 @@
             {% else %}Risiko preeklampsia tinggi. Segera konsultasi dengan dokter spesialis.{% endif %}
           </p>
           <div class="confidence-bar {{ result.final_result }}" style="margin-top:.75rem;">
-            <label>
-              <span>Confidence Score</span>
-              <strong>{{ result.confidence }}%</strong>
-            </label>
-            <div class="bar-track">
-              <div class="bar-fill" style="width:{{ result.confidence }}%;"></div>
-            </div>
+            <label><span>Confidence Score</span><strong>{{ result.confidence }}%</strong></label>
+            <div class="bar-track"><div class="bar-fill" style="width:{{ result.confidence }}%;"></div></div>
           </div>
         </div>
       </div>
 
-      <!-- Gejala Aktif -->
-      <div class="card mb-2">
-        <div class="card-header">
-          <div class="card-icon"><i class="fa-solid fa-virus"></i></div>
-          Gejala Terdeteksi ({{ result.gejala_set|length }}/19)
-        </div>
-        <div class="tag-list">
-          {% for g in result.gejala_set %}
-          <span class="tag tag-gejala">
-            <strong>{{ g }}</strong>
-            <span style="font-weight:400;">{{ result.gejala_labels|dictsort:g }}</span>
-          </span>
-          {% endfor %}
-        </div>
-        <!-- Detailed gejala -->
-        <table class="data-table" style="margin-top:1rem;">
-          <thead>
-            <tr><th>Kode</th><th>Keterangan</th></tr>
-          </thead>
-          <tbody>
-            {% for g, label in result.gejala_labels.items %}
-            <tr>
-              <td><span class="tag tag-gejala" style="font-size:.78rem;">{{ g }}</span></td>
-              <td>{{ label }}</td>
-            </tr>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem;">
+        <div class="card mb-2">
+          <div class="card-header">
+            <div class="card-icon"><i class="fa-solid fa-virus"></i></div>
+            Gejala Terdeteksi ({{ result.gejala_set|length }}/19)
+          </div>
+          <div class="tag-list">
+            {% for g in result.gejala_set %}
+            <span class="tag tag-gejala"><strong>{{ g }}</strong> <span style="font-weight:400;">{{ result.gejala_labels|dictsort:g }}</span></span>
             {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Rule Aktif -->
-      <div class="card mb-2">
-        <div class="card-header">
-          <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
-          Rule Aktif ({{ result.active_rules|length }} rule)
+          </div>
+          <details style="margin-top: 1rem; border-top: 1px solid var(--slate-200); padding-top: 0.5rem;">
+            <summary style="cursor: pointer; font-size: 0.85rem; color: var(--pink-600); font-weight: 600;">
+              <i class="fa-solid fa-chevron-down"></i> Lihat Tabel Detail Gejala
+            </summary>
+            <table class="data-table" style="margin-top:0.5rem;">
+              <thead><tr><th>Kode</th><th>Keterangan</th></tr></thead>
+              <tbody>
+                {% for g, label in result.gejala_labels.items %}
+                <tr><td><span class="tag tag-gejala" style="font-size:.78rem;">{{ g }}</span></td><td>{{ label }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </details>
         </div>
-        {% if result.active_rules %}
-          {% for rule in result.active_rules %}
-          <div style="padding:.65rem .9rem;background:var(--slate-50);border-radius:var(--radius-sm);margin-bottom:.5rem;border-left:3px solid var(--pink-400);font-size:.84rem;">
-            <strong style="color:var(--pink-600);">{{ rule.kode_rule }}</strong>
-            <span style="color:var(--slate-500);margin:0 .4rem;">IF</span>
-            {% for c in rule.kondisi_list %}
-              <span class="tag-kondisi">{{ c }}</span>{% if not forloop.last %} <span style="color:var(--slate-400);font-size:.75rem;">AND</span> {% endif %}
-            {% endfor %}
-            <span style="color:var(--slate-500);margin:0 .4rem;">THEN</span>
-            <span class="badge badge-{{ rule.risiko }}">{{ rule.risiko|upper }}</span>
-            <span style="margin-left:.5rem;color:var(--slate-400);font-size:.75rem;">conf: {{ rule.confidence|floatformat:2 }}</span>
-          </div>
-          {% endfor %}
-        {% else %}
-          <p style="color:var(--slate-400);font-size:.85rem;font-style:italic;">Tidak ada rule yang cocok — hasil berdasarkan ML</p>
-        {% endif %}
-      </div>
 
-      <!-- Compare -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-          Perbandingan Hasil
-        </div>
-        <div class="compare-row">
-          <div class="compare-item">
-            <div class="ci-label">🧠 Sistem Pakar</div>
-            <div class="ci-value">
-              {% if result.rule_result %}
-                <span class="badge badge-{{ result.rule_result }}">{{ result.rule_result|upper }}</span>
-              {% else %}
-                <span style="color:var(--slate-400);font-size:.85rem;">Tidak ada rule cocok</span>
-              {% endif %}
-            </div>
+        <div class="card mb-2">
+          <div class="card-header">
+            <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
+            Rule Aktif ({{ result.active_rules|length }} rule)
           </div>
-          <div class="compare-item">
-            <div class="ci-label">🤖 Machine Learning C4.5</div>
-            <div class="ci-value">
-              <span class="badge badge-{{ result.ml_result }}">{{ result.ml_result|upper }}</span>
-              <span style="font-size:.78rem;color:var(--slate-400);margin-left:.4rem;">{{ result.ml_confidence }}%</span>
-            </div>
-          </div>
-          <div class="compare-item" style="border-color:var(--pink-300);background:var(--pink-50);">
-            <div class="ci-label">✅ Hasil Akhir</div>
-            <div class="ci-value">
-              <span class="badge badge-{{ result.final_result }}">{{ result.final_result|upper }}</span>
-            </div>
+          <div style="max-height: 250px; overflow-y: auto; padding-right: 0.5rem;">
+            {% if result.active_rules %}
+              {% for rule in result.active_rules %}
+              <div style="padding:.65rem .9rem;background:var(--slate-50);border-radius:var(--radius-sm);margin-bottom:.5rem;border-left:3px solid var(--pink-400);font-size:.84rem;">
+                <strong style="color:var(--pink-600);">{{ rule.kode_rule }}</strong>
+                <span style="color:var(--slate-500);margin:0 .4rem;">IF</span>
+                {% for c in rule.kondisi_list %}<span class="tag-kondisi">{{ c }}</span>{% if not forloop.last %} <span style="color:var(--slate-400);font-size:.75rem;">AND</span> {% endif %}{% endfor %}
+                <span style="color:var(--slate-500);margin:0 .4rem;">THEN</span>
+                <span class="badge badge-{{ rule.risiko }}">{{ rule.risiko|upper }}</span>
+                <span style="margin-left:.5rem;color:var(--slate-400);font-size:.75rem;">conf: {{ rule.confidence|floatformat:2 }}</span>
+              </div>
+              {% endfor %}
+            {% else %}
+              <p style="color:var(--slate-400);font-size:.85rem;font-style:italic;">Tidak ada rule yang cocok — hasil berdasarkan ML</p>
+            {% endif %}
           </div>
         </div>
+        <div class="card mb-2">
+          <div class="card-header">
+            <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+            Perbandingan Hasil
+          </div>
+          <div class="compare-row"> 
+            <div class="compare-item">
+              <div class="ci-label">🧠 Sistem Pakar</div>
+              <div class="ci-value">
+                {% if result.rule_result %}
+                  <span class="badge badge-{{ result.rule_result }}">{{ result.rule_result|upper }}</span>
+                {% else %}
+                  <span style="color:var(--slate-400);font-size:.85rem;">Tidak ada rule cocok</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="compare-item" style="width: 100%;">
+              <div class="ci-label">🤖 Machine Learning</div>
+              <div class="ci-value">
+                <span class="badge badge-{{ result.ml_result }}">{{ result.ml_result|upper }}</span>
+                <span style="font-size:.78rem;color:var(--slate-400);margin-left:.4rem;">{{ result.ml_confidence }}%</span>
+              </div>
+            </div>
+            <div class="compare-item" style="width: 100%; border-color:var(--pink-300); background:var(--pink-50);">
+              <div class="ci-label">✅ Hasil Akhir</div>
+              <div class="ci-value">
+                <span class="badge badge-{{ result.final_result }}">{{ result.final_result|upper }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
     </div>
     {% endif %}
-  </div>
 
+  </div>
 </div>
 
 <script>
