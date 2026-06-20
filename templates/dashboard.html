@@ -80,6 +80,7 @@
             <th>Diastolik</th>
             <th>Gejala Aktif</th>
             <th>Rule Aktif</th>
+            <th>Basis Aturan</th>
             <th>ML</th>
             <th>Hasil Akhir</th>
             <th>Confidence</th>
@@ -114,6 +115,13 @@
             <td>
               {% if d.rule_aktif %}
                 <span style="font-size:.78rem;color:#6d28d9;font-weight:600;">{{ d.rule_aktif }}</span>
+              {% else %}
+                <span style="color:var(--slate-300);font-size:.78rem;">—</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if d.rule_result %}
+                <span class="badge badge-{{ d.rule_result|lower }}">{{ d.rule_result|upper }}</span>
               {% else %}
                 <span style="color:var(--slate-300);font-size:.78rem;">—</span>
               {% endif %}
