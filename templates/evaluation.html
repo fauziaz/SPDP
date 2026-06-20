@@ -2,90 +2,87 @@
 {% block title %}Evaluasi Model{% endblock %}
 
 {% block content %}
+<style>
+  .eval-header { text-align: center; margin-bottom: 2rem; }
+  .eval-header h1 { font-size: 1.6rem; color: var(--slate-800); margin-bottom: 0.25rem; }
+  .eval-header p { color: var(--slate-500); font-size: 0.9rem; }
+  
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .kpi-card { background: #fff; border: 1px solid var(--slate-200); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  .kpi-value { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .kpi-label { font-size: 0.85rem; color: var(--slate-500); font-weight: 600; text-transform: uppercase; }
+
+  /* Charts */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .clean-card { background: #fff; border: 1px solid var(--slate-200); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  .clean-card-title { font-size: 1rem; color: var(--slate-700); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+  /* Table Custom */
+  .cm-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed; }
+  .cm-table th, .cm-table td { border: 1px solid var(--slate-200); padding: 1rem; }
+  .cm-table thead th { background: var(--pink-50); color: var(--pink-600); font-weight: 600; }
+  .cm-diag { background: var(--pink-100); font-weight: bold; color: var(--pink-700); font-size: 1.1rem; }
+  
+  /* TAMBAHKAN BAGIAN INI UNTUK MERAPIKAN KOLOM AKTUAL */
+  .cm-table th:first-child, .cm-table td:first-child { 
+    text-align: center; 
+    width: 15%; 
+  }
+</style>
+
 <div class="page-container">
 
-  <div class="page-header">
+  <div class="eval-header">
     <h1><i class="fa-solid fa-chart-bar" style="color:var(--pink-500);margin-right:.5rem;"></i>Evaluasi Model C4.5</h1>
     <p>Performa Decision Tree pada {{ total_test }} data uji (test dataset)</p>
   </div>
 
-  <!-- Metrics -->
-  <div class="metric-grid mb-3">
-    <div class="metric-card">
-      <div class="metric-value">{{ accuracy }}%</div>
-      <div class="metric-label">Accuracy</div>
-      <div style="margin-top:.5rem;">
-        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
-          <div style="height:100%;width:{{ accuracy }}%;background:linear-gradient(90deg,var(--pink-400),var(--pink-600));border-radius:99px;"></div>
-        </div>
-      </div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-value" style="color: var(--pink-600);">{{ accuracy }}%</div>
+      <div class="kpi-label">Accuracy</div>
     </div>
-    <div class="metric-card">
-      <div class="metric-value">{{ precision }}%</div>
-      <div class="metric-label">Precision</div>
-      <div style="margin-top:.5rem;">
-        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
-          <div style="height:100%;width:{{ precision }}%;background:linear-gradient(90deg,#818cf8,#6d28d9);border-radius:99px;"></div>
-        </div>
-      </div>
+    <div class="kpi-card">
+      <div class="kpi-value" style="color: #6d28d9;">{{ precision }}%</div>
+      <div class="kpi-label">Precision</div>
     </div>
-    <div class="metric-card">
-      <div class="metric-value">{{ recall }}%</div>
-      <div class="metric-label">Recall</div>
-      <div style="margin-top:.5rem;">
-        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
-          <div style="height:100%;width:{{ recall }}%;background:linear-gradient(90deg,#34d399,#059669);border-radius:99px;"></div>
-        </div>
-      </div>
+    <div class="kpi-card">
+      <div class="kpi-value" style="color: #059669;">{{ recall }}%</div>
+      <div class="kpi-label">Recall</div>
     </div>
-    <div class="metric-card">
-      <div class="metric-value">{{ f1 }}%</div>
-      <div class="metric-label">F1 Score</div>
-      <div style="margin-top:.5rem;">
-        <div style="height:6px;background:var(--slate-200);border-radius:99px;">
-          <div style="height:100%;width:{{ f1 }}%;background:linear-gradient(90deg,#fb923c,#ea580c);border-radius:99px;"></div>
-        </div>
-      </div>
+    <div class="kpi-card">
+      <div class="kpi-value" style="color: #ea580c;">{{ f1 }}%</div>
+      <div class="kpi-label">F1 Score</div>
     </div>
   </div>
 
-  <!-- Charts Row -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
-
-    <!-- Bar Chart Metrics -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon"><i class="fa-solid fa-chart-column"></i></div>
-        Visualisasi Metrik Evaluasi
+  <div class="chart-grid">
+    <div class="clean-card">
+      <div class="clean-card-title">
+        <i class="fa-solid fa-chart-column" style="color: var(--pink-500);"></i> Distribusi Metrik
       </div>
-      <canvas id="metricBar" height="200"></canvas>
+      <canvas id="metricBar" height="220"></canvas>
     </div>
 
-    <!-- Confusion Matrix Heatmap -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-icon"><i class="fa-solid fa-table-cells"></i></div>
-        Confusion Matrix (Heatmap)
+    <div class="clean-card">
+      <div class="clean-card-title">
+        <i class="fa-solid fa-table-cells" style="color: var(--pink-500);"></i> Confusion Matrix (Heatmap)
       </div>
-      <canvas id="cmChart" height="200"></canvas>
+      <canvas id="cmChart" height="220"></canvas>
     </div>
-
   </div>
 
-  <!-- CM Table -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon"><i class="fa-solid fa-table"></i></div>
-      Tabel Confusion Matrix
+  <div class="clean-card">
+    <div class="clean-card-title">
+      <i class="fa-solid fa-table" style="color: var(--pink-500);"></i> Tabel Confusion Matrix
     </div>
-    <div class="cm-wrapper">
+    <div style="overflow-x:auto;">
       <table class="cm-table">
         <thead>
           <tr>
             <th style="background:#fff;border-color:transparent;"></th>
-            <th colspan="{{ classes_list|length }}" style="background:var(--pink-100);color:var(--pink-600);">
-              Prediksi
-            </th>
+            <th colspan="{{ classes_list|length }}">Prediksi Model</th>
           </tr>
           <tr>
             <th style="background:#fff;border-color:transparent;">Aktual</th>
@@ -97,7 +94,7 @@
         <tbody>
           {% for row in cm_list %}
           <tr>
-            <th>{{ classes_list|slice:forloop.counter0|last }}</th>
+            <th style="background: var(--slate-50);">{{ classes_list|slice:forloop.counter|last }}</th>
             {% for val in row %}
             <td {% if forloop.counter0 == forloop.parentloop.counter0 %}class="cm-diag"{% endif %}>
               {{ val }}
@@ -109,105 +106,129 @@
       </table>
     </div>
     <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400);text-align:center;">
-      <em>Baris = label aktual, Kolom = prediksi model. Diagonal = prediksi benar.</em>
+      <em>Baris = Label Aktual dari Dataset, Kolom = Prediksi AI. Kotak warna muda adalah prediksi benar.</em>
     </p>
   </div>
 
 </div>
 
 <script>
-const classes = {{ classes }};
-const cm = {{ cm }};
-const metrics = [{{ accuracy }}, {{ precision }}, {{ recall }}, {{ f1 }}];
-const metricLabels = ['Accuracy', 'Precision', 'Recall', 'F1 Score'];
-const metricColors = ['rgba(232,62,140,.8)','rgba(109,40,217,.8)','rgba(5,150,105,.8)','rgba(234,88,12,.8)'];
+  const classes = {{ classes|safe }};
+  const cm = {{ cm|safe }};
+  const metrics = [{{ accuracy }}, {{ precision }}, {{ recall }}, {{ f1 }}];
+  const metricLabels = ['Accuracy', 'Precision', 'Recall', 'F1 Score'];
+  const metricColors = ['rgba(232, 62, 140, 0.85)', 'rgba(109, 40, 217, 0.85)', 'rgba(5, 150, 105, 0.85)', 'rgba(234, 88, 12, 0.85)'];
 
-// Metric Bar
-new Chart(document.getElementById('metricBar'), {
-  type: 'bar',
-  data: {
-    labels: metricLabels,
-    datasets: [{
-      label: 'Score (%)',
-      data: metrics,
-      backgroundColor: metricColors,
-      borderRadius: 8,
-      borderSkipped: false,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    plugins: { legend: { display: false }},
-    scales: {
-      x: { min: 0, max: 100, ticks: { callback: v => v+'%' }, grid: { color: '#f1f5f9' }},
-      y: { grid: { display: false }}
-    }
-  }
-});
-
-// CM Heatmap (bubble-style)
-const cmData = [];
-let maxVal = 0;
-cm.forEach((row, r) => row.forEach((val, c) => { if(val > maxVal) maxVal = val; }));
-
-cm.forEach((row, r) => {
-  row.forEach((val, c) => {
-    cmData.push({ x: c, y: r, v: val });
-  });
-});
-
-// Custom heatmap via scatter
-new Chart(document.getElementById('cmChart'), {
-  type: 'scatter',
-  data: {
-    datasets: [{
-      label: 'CM',
-      data: cmData.map(d => ({ x: d.x, y: d.y })),
-      backgroundColor: cmData.map(d => {
-        const alpha = maxVal > 0 ? 0.15 + (d.v / maxVal) * 0.75 : 0.15;
-        return d.x === d.y
-          ? `rgba(232,62,140,${alpha})`
-          : `rgba(148,163,184,${alpha})`;
-      }),
-      pointRadius: 38,
-      pointHoverRadius: 40,
-    }]
-  },
-  plugins: [{
-    id: 'cmLabels',
-    afterDraw(chart) {
-      const ctx = chart.ctx;
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      cmData.forEach((d, i) => {
-        const pt = chart.getDatasetMeta(0).data[i];
-        ctx.font = 'bold 18px Poppins';
-        ctx.fillStyle = d.x === d.y ? '#9d174d' : '#475569';
-        ctx.fillText(d.v, pt.x, pt.y);
-      });
-      ctx.restore();
-    }
-  }],
-  options: {
-    responsive: true,
-    plugins: { legend: { display: false }, tooltip: { enabled: false }},
-    scales: {
-      x: {
-        min: -0.5, max: classes.length - 0.5, stepSize: 1,
-        ticks: { callback: v => classes[v] || '', font: { size: 11 }},
-        title: { display: true, text: 'Prediksi', color: '#e83e8c' },
-        grid: { display: false },
-      },
-      y: {
-        min: -0.5, max: classes.length - 0.5, stepSize: 1, reverse: false,
-        ticks: { callback: v => classes[v] || '', font: { size: 11 }},
-        title: { display: true, text: 'Aktual', color: '#e83e8c' },
-        grid: { display: false },
+  // Bar Chart
+  new Chart(document.getElementById('metricBar'), {
+    type: 'bar',
+    data: {
+      labels: metricLabels,
+      datasets: [{
+        data: metrics,
+        backgroundColor: metricColors,
+        borderRadius: 6,
+        barThickness: 35
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { min: 0, max: 100, ticks: { callback: v => v+'%' } },
+        y: { grid: { display: false } }
       }
     }
-  }
-});
+  });
+
+  // Data Heatmap
+  const gridData = [];
+  let maxVal = 0;
+  cm.forEach((row, r) => row.forEach((val, c) => { if(val > maxVal) maxVal = val; }));
+
+  cm.forEach((row, r) => {
+    row.forEach((val, c) => { gridData.push({ x: c, y: r, v: val }); });
+  });
+
+  // Heatmap Chart.js (RAPAT SEMPURNA + GRADIEN DRAMATIS)
+  new Chart(document.getElementById('cmChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        data: gridData.map(d => ({ x: d.x, y: d.y })),
+        backgroundColor: gridData.map(d => {
+          // Warna kotak 0 dibuat solid terang agar kotaknya terlihat utuh menyambung
+          if (d.v === 0) return 'rgba(241, 245, 249, 1)'; 
+          
+          // Gradien Dramatis: Skala langsung dibagi rata
+          const dynamicAlpha = maxVal > 0 ? (d.v / maxVal) : 0;
+          const alpha = 0.1 + (dynamicAlpha * (1.0 - 0.1)); // Semakin kecil angka, semakin pudar/keputihan
+          
+          return `rgba(232, 62, 140, ${alpha})`;
+        }),
+        pointStyle: 'rect', 
+        borderWidth: 1.5, // Tebal garis pemisah
+        borderColor: '#ffffff', // Garis putih tipis antar ubin seperti di Python
+        
+        // Perhitungan radius yang dijamin memuai penuh
+        pointRadius: function(context) {
+            const chart = context.chart;
+            if (!chart.chartArea) return 60; // Ukuran aman saat web baru loading
+            const w = chart.chartArea.right - chart.chartArea.left;
+            const h = chart.chartArea.bottom - chart.chartArea.top;
+            const size = Math.min(w, h) / classes.length;
+            return (size / 1.9); 
+        },
+        pointHoverRadius: function(context) {
+            const chart = context.chart;
+            if (!chart.chartArea) return 60;
+            const w = chart.chartArea.right - chart.chartArea.left;
+            const h = chart.chartArea.bottom - chart.chartArea.top;
+            const size = Math.min(w, h) / classes.length;
+            return (size / 1.9);
+        },
+      }]
+    },
+    plugins: [{
+      id: 'cmGridLabels',
+      afterDraw(chart) {
+        const ctx = chart.ctx;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        gridData.forEach((d, i) => {
+          if (d.v > 0) {
+            const pt = chart.getDatasetMeta(0).data[i];
+            ctx.font = 'bold 16px Poppins';
+            
+            // Dinamika Warna Teks: Putih jika kotak pekat, Pink tua jika kotak terang (misal kotak '3')
+            const alphaRatio = d.v / maxVal;
+            ctx.fillStyle = alphaRatio > 0.5 ? '#fff' : '#9d174d';
+            
+            ctx.fillText(d.v, pt.x, pt.y);
+          }
+        });
+      }
+    }],
+    options: {
+      responsive: true,
+      aspectRatio: 1.2, // Memaksa area grafik berbentuk persegi padat
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          min: -0.5, max: classes.length - 0.5, stepSize: 1,
+          ticks: { callback: v => classes[v] || '', font: { weight: 'bold' } },
+          title: { display: true, text: 'Prediksi', color: '#e83e8c', font: { weight: 'bold' } },
+          grid: { display: false }
+        },
+        y: {
+          min: -0.5, max: classes.length - 0.5, stepSize: 1, reverse: true, 
+          ticks: { callback: v => classes[v] || '', font: { weight: 'bold' } },
+          title: { display: true, text: 'Aktual', color: '#e83e8c', font: { weight: 'bold' } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
 </script>
 {% endblock %}

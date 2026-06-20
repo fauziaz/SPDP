@@ -5,9 +5,8 @@ import numpy as np
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.http import JsonResponse
-from django.core.paginator import Paginator
 from sklearn.metrics import (accuracy_score, precision_score, recall_score,
-                              f1_score, confusion_matrix)
+                             f1_score, confusion_matrix)
 from .forms import DiagnosisForm
 from .models import Rule, DiagnosisResult
 from .expert import run_diagnosis, GEJALA_LABEL
@@ -29,7 +28,7 @@ def diagnosis_view(request):
                 age=d['usia'],
                 bmi=d['bmi'],
                 systolic=d['sistolik'],
-                diastolic=d['diastolik'],
+                diastolik=d['diastolik'],
                 gest_age=d['usia_kehamilan'],
                 proteinuria=d['proteinuria'],
                 diabetes=d['diabetes'],
@@ -67,13 +66,6 @@ def dashboard_view(request):
 
     for d in recent:
         d.gejala_list = d.gejala_aktif.split(',')
-
-    semua_diagnosis = DiagnosisResult.objects.all().order_by('-created_at')
-
-    paginator = Paginator(semua_diagnosis, 10)
-
-    page_number = request.GET.get('page')
-    recent = paginator.get_page(page_number)
 
     context = {
         'total': total,
@@ -127,22 +119,35 @@ def evaluation_view(request):
     y_true = encoder.transform(y_true_raw)
     y_pred = model.predict(X_test)
 
+    # 1. Ambil urutan alfabetis bawaan mesin ('high', 'low', 'mid')
     classes = list(encoder.classes_)
+    cm_raw = confusion_matrix(y_true, y_pred)
+    
+    # 2. Paksa ke urutan logis yang benar (LOW, MID, HIGH)
+    desired_order = ['low', 'mid', 'high']
+    
+    # 3. Cari indeks perubahan posisinya
+    idx_map = [classes.index(c) for c in desired_order]
+    
+    # 4. Susun ulang baris dan kolom matriks menggunakan Numpy
+    cm_reordered = np.array(cm_raw)[idx_map, :][:, idx_map].tolist()
+    classes_reordered = [c.upper() for c in desired_order]
+
+    # Hitung metrik evaluasi
     acc   = round(accuracy_score(y_true, y_pred) * 100, 2)
     prec  = round(precision_score(y_true, y_pred, average='weighted', zero_division=0) * 100, 2)
     rec   = round(recall_score(y_true, y_pred, average='weighted', zero_division=0) * 100, 2)
     f1    = round(f1_score(y_true, y_pred, average='weighted', zero_division=0) * 100, 2)
-    cm    = confusion_matrix(y_true, y_pred).tolist()
 
     context = {
         'accuracy': acc,
         'precision': prec,
         'recall': rec,
         'f1': f1,
-        'cm': json.dumps(cm),
-        'classes': json.dumps([c.upper() for c in classes]),
-        'classes_list': [c.upper() for c in classes],
-        'cm_list': cm,
+        'cm': json.dumps(cm_reordered),
+        'classes': json.dumps(classes_reordered),
+        'classes_list': classes_reordered,
+        'cm_list': cm_reordered,
         'total_test': len(y_true),
     }
     return render(request, 'evaluation.html', context)
