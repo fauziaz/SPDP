@@ -28,7 +28,7 @@ def diagnosis_view(request):
                 age=d['usia'],
                 bmi=d['bmi'],
                 systolic=d['sistolik'],
-                diastolik=d['diastolik'],
+                diastolic=d['diastolik'],
                 gest_age=d['usia_kehamilan'],
                 proteinuria=d['proteinuria'],
                 diabetes=d['diabetes'],
