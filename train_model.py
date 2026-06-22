@@ -77,10 +77,10 @@ def convert_to_gejala(age, bmi, systolic, diastolic, gest_age,
 # ─────────────────────────────────────────────
 ALL_GEJALA = [f'G{i}' for i in range(1, 23)] # DIUBAH DARI 20 MENJADI 23
 
-# ─────────────────────────────────────────────
-# 3. FEATURE ENGINEERING → GEJALA BINARY
-# ─────────────────────────────────────────────
-ALL_GEJALA = [f'G{i}' for i in range(1, 20)]
+# # ─────────────────────────────────────────────
+# # 3. FEATURE ENGINEERING → GEJALA BINARY
+# # ─────────────────────────────────────────────
+# ALL_GEJALA = [f'G{i}' for i in range(1, 20)]
 
 def df_to_gejala_matrix(df):
     rows = []
